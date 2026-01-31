@@ -1,0 +1,30 @@
+# === Gemini & Google AI 核心规则 ===
+DOMAIN-SUFFIX,gemini.google.com
+DOMAIN-SUFFIX,generativelanguage.googleapis.com
+DOMAIN-SUFFIX,alkalimarginweb-pa.googleapis.com
+DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com
+DOMAIN-SUFFIX,notebooklm.google
+DOMAIN-SUFFIX,deepmind.com
+DOMAIN-SUFFIX,deepmind.google
+
+# === 关键验证与信标通道 (防止泄露) ===
+DOMAIN-SUFFIX,app-analytics-services.com
+DOMAIN-SUFFIX,gvt2.com
+DOMAIN-SUFFIX,gstatic.com
+DOMAIN-KEYWORD,googleapis
+
+# 关键依赖 (图片生成/历史记录图片)
+DOMAIN-SUFFIX,aistudio.google.com
+# 必须走指定节点，否则可能出现裂图
+DOMAIN,generativelanguage.googleapis.com
+DOMAIN,alkalimakersuite-pa.clients6.google.com
+
+# === 统一 Google 身份与登录 (确保 IP 一致) ===
+DOMAIN-SUFFIX,google.com,PROXY
+DOMAIN-SUFFIX,googleusercontent.com,PROXY
+DOMAIN-SUFFIX,accounts.google.com,PROXY
+
+DOMAIN-SUFFIX,geller-pa.googleapis.com
+DOMAIN,ai.google.dev
+DOMAIN,bard.google.com
+DOMAIN,gemini.google.com
