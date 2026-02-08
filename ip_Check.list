@@ -1,0 +1,34 @@
+# --- 常用 IP/地理位置查询 ---
+DOMAIN-SUFFIX,ip.sb
+DOMAIN-SUFFIX,ipget.net
+DOMAIN-SUFFIX,ipapi.co
+DOMAIN-SUFFIX,ip-api.com
+DOMAIN-SUFFIX,ip.gs
+DOMAIN-SUFFIX,ipinfo.io
+DOMAIN-SUFFIX,icanhazip.com
+DOMAIN-SUFFIX,ident.me,PROXY
+DOMAIN-SUFFIX,whatismyip.com
+DOMAIN-SUFFIX,myip.la
+
+# --- 综合检测与欺诈分 (Scamalytics/Whoer) ---
+DOMAIN-SUFFIX,scamalytics.com
+DOMAIN-SUFFIX,whoer.net
+DOMAIN-SUFFIX,iphey.com
+DOMAIN-SUFFIX,pixelscan.net
+DOMAIN-SUFFIX,ip2location.com
+DOMAIN-SUFFIX,ippure.com
+DOMAIN-SUFFIX,iplark.com
+DOMAIN-SUFFIX,Ping0.cc
+DOMAIN-SUFFIX,ip111.cn
+DOMAIN-SUFFIX,ipjiance.com
+
+# --- 泄露测试 (DNS/WebRTC) ---
+DOMAIN-SUFFIX,ipleak.net
+DOMAIN-SUFFIX,dnsleaktest.com
+DOMAIN-SUFFIX,browserleaks.com
+DOMAIN-SUFFIX,browserleaks.org
+DOMAIN-SUFFIX,ipx.ac
+
+# --- 国内开发者常用工具 ---
+DOMAIN-SUFFIX,ipcheck.ing
+DOMAIN-SUFFIX,ip.skk.moe
