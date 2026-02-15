@@ -23,9 +23,14 @@ DOMAIN,ai.google.dev
 DOMAIN,bard.google.com
 
 # === 统一 Google 身份与登录 (确保 IP 一致) ===
-DOMAIN-SUFFIX,google.com
+DOMAIN-SUFFIX,makersuite.google.com
 DOMAIN-SUFFIX,googleusercontent.com
 DOMAIN-SUFFIX,accounts.google.com
 
 # === 怀疑和Gemini有关的请求 ===
 DOMAIN-SUFFIX,googletagmanager.com
+DOMAIN-SUFFIX,generativeai.google
+DOMAIN-SUFFIX,apis.google.com
+DOMAIN-KEYWORD,colab
+DOMAIN-KEYWORD,developerprofiles
+DOMAIN-KEYWORD,generativelanguage
