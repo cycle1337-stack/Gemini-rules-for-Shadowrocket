@@ -4,7 +4,6 @@
 [MITM]
 hostname = %APPEND% app.bilibili.com, grpc.biliapi.net, api.bilibili.com
 
-[Body Rewrite]
-# 同时剔除 pos 3 (发布) 和 pos 4 (会员购/消息)
-# 这样底栏将只剩下：首页、动态、我的
-http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.data.bottom |= map(select(.pos != 3 and .pos != 4))'
+[Script]
+# 同时剔除 pos 3 (发布) 和 pos 4 (会员购)
+B站底栏精简 = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2, requires-body=1, binary-body-mode=1, jq='.data.bottom |= map(select(.pos != 3 and .pos != 4))'
