@@ -8,6 +8,5 @@ hostname = %APPEND% app.bilibili.com, grpc.biliapi.net, api.bilibili.com
 # 1. 底部栏精简：剔除 pos 3 (发布) 和 pos 4 (会员购)
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.data.bottom |= map(select(.pos != 3 and .pos != 4))'
 
-# 2. 顶部栏精简：剔除右上角的游戏机图标 (通常 id 为 160 或 161)
-# 逻辑：重新过滤顶栏数组，只保留 id 不是游戏中心的项目
-http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.data.top |= map(select(.id != 160 and .id != 161))'
+# 2. 顶部栏精简：直接将 top 数组重置为空 (彻底干掉游戏机、皮肤图标)
+http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.data.top = []'
