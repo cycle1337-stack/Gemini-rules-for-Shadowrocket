@@ -19,5 +19,5 @@ http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.d
 # 逻辑：只要 banner_item 为空 且 ad_info 为空的项目才保留
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\? '.data.items |= map(select(.banner_item == null and .ad_info == null))'
 
-# 4. “我的”页面净化：剔除游戏中心、会员购、漫画、公益、我的课程等
+# 4. “我的”页面净化：剔除游戏中心、会员购、漫画、公益、我的课程
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/mine\? '.data.sections_v2 |= map(.items |= map(select(.title | IN("看视频免流量", "游戏中心", "会员购", "漫画", "哔哩哔哩公益", "我的课程", "能量加油站", "未成年人守护") | not)))'
