@@ -33,8 +33,3 @@ http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/search\/recommend\/word '
 
 # 7. 屏蔽未成年模式弹窗
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/teenagers\/status\? '.data.teenagers_status = 0'
-
-[Script]
-# 1. 首页标签页精简：强制只保留 直播、推荐、热门
-# 这里使用了你之前模块中证明有效的脚本路径
-bili_tab = type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab,requires-body=1,script-path=https://raw.githubusercontent.com/deezertidal/private/master/js-backup/Script/bilibili_json.js
