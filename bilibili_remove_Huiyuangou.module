@@ -5,8 +5,8 @@
 hostname = %APPEND% app.bilibili.com, grpc.biliapi.net, api.bilibili.com
 
 [Body Rewrite]
-# 1. 底部栏精简：剔除 pos 3 (发布) 和 pos 4 (会员购)
+# 1. 底部栏精简：剔除发布(pos 3)和会员购(pos 4)
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.data.bottom |= map(select(.pos != 3 and .pos != 4))'
 
-# 2. 顶部栏精简：直接将 top 数组重置为空 (彻底干掉游戏机、皮肤图标)
-http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.data.top = []'
+# 2. 顶部栏精准过滤：只保留名称为“消息”的项目，剔除“游戏中心”等其他图标
+http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.data.top |= map(select(.name == "消息"))'
