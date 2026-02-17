@@ -8,16 +8,28 @@ hostname = %APPEND% app.bilibili.com, grpc.biliapi.net, api.bilibili.com
 # 拦截搜索广场，彻底去除热搜和发现
 ^https:\/\/app\.bilibili\.com\/x\/v2\/search\/square\? data-type=text data="{"code":-404,"message":"-404","ttl":1,"data":null}" header="Content-Type:text/plain"
 
+# 直接拒绝广告物料下载请求
+^https?:\/\/api\.bilibili\.com\/x\/vip\/ads\/materials\? data-type=text data="{"code":-404,"message":"-404","ttl":1,"data":null}" header="Content-Type:text/plain"
+
 [Body Rewrite]
 # 1. 底部栏精简：剔除发布(3)和会员购(4)
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.data.bottom |= map(select(.pos != 3 and .pos != 4))'
 
-# 2. 顶部栏精简：只保留消息，去除游戏机图标
+# 2. 首页顶部栏精简：只保留消息，去除游戏机图标
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.data.top |= map(select(.name == "消息"))'
 
 # 3. 首页全方位去广告：清空顶部 Banner + 剔除刷出来的 ad_info 广告卡片
 # 逻辑：只要 banner_item 为空 且 ad_info 为空的项目才保留
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\? '.data.items |= map(select(.banner_item == null and .ad_info == null))'
 
-# 4. “我的”页面净化：剔除游戏中心、会员购、漫画、公益、我的课程
-http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/mine\? '.data.sections_v2 |= map(.items |= map(select(.title | IN("看视频免流量", "游戏中心", "会员购", "漫画", "哔哩哔哩公益", "我的课程", "能量加油站", "未成年人守护") | not)))'
+# 4. “我的”页面净化：剔除推广图标，并强制切除所有横幅位和会员推广区
+http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/mine\? '.data |= (del(.vip_section, .vip_section_v2, .modular_vip_section, .live_tip, .answer) | .sections_v2 |= map(.items |= map(select(.title | IN("看视频免流量", "游戏中心", "会员购", "漫画", "哔哩哔哩公益", "我的课程", "工房", "能量加油站", "个性装扮", "大会员5.1折", "未成年人守护") | not))))'
+
+# 5. 开屏广告净化：清空启动时的广告列表数据
+http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/(list|show|event\/list2)\? '.data |= with_entries(if .key | IN("show", "event_list") then .value = [] else . end)'
+
+# 6. 屏蔽播放页底部的“大家都在搜”横幅
+http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/search\/recommend\/word '.data = null'
+
+# 7. 屏蔽未成年模式弹窗
+http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/teenagers\/status\? '.data.teenagers_status = 0'
