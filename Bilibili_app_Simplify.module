@@ -23,7 +23,7 @@ http-response-jq ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? '.d
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\? '.data.items |= map(select(.banner_item == null and .ad_info == null))'
 
 # 4. “我的”页面净化：剔除推广图标，并强制切除所有横幅位和会员推广区
-http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/mine\? '.data |= (del(.vip_section, .vip_section_v2, .modular_vip_section, .live_tip, .answer) | .sections_v2 |= map(.items |= map(select(.title | IN("看视频免流量", "游戏中心", "会员购", "漫画", "哔哩哔哩公益", "我的课程", "工房", "能量加油站", "个性装扮", "大会员5.1折", "未成年人守护") | not))))'
+http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/mine\? '.data |= (del(.vip_section, .vip_section_v2, .modular_vip_section, .live_tip, .answer) | .sections_v2 |= map(.items |= map(select(.title | IN("看视频免流量", "游戏中心", "会员购", "漫画", "哔哩哔哩公益", "我的课程", "工房", "能量加油站", "个性装扮", "必火推广", "大会员5.1折", "未成年人守护") | not))))'
 
 # 5. 开屏广告净化：清空启动时的广告列表数据
 http-response-jq ^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/(list|show|event\/list2)\? '.data |= with_entries(if .key | IN("show", "event_list") then .value = [] else . end)'
