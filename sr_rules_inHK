@@ -70,6 +70,3 @@ FINAL,🎯 全球直连
 
 [Host]
 localhost = 127.0.0.1
-
-[MITM]
-enable = true
