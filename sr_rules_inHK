@@ -1,170 +1,77 @@
 [General]
-# 更新时间2026/02/22 21:24
-# cycle1337的自用配置文件，修改自：https://raw.githubusercontent.com/colin-chang/YouTubeResources/refs/heads/main/Shadowrocket/a-nomad.conf
+# --- 香港专用优化配置 ---
+# 更新时间：2026-02-26
 
-# 旁路系统。如果禁用此选项，可能会导致一些系统问题，如推送通知延迟。
 bypass-system = true
-# 跳过代理。此选项强制这些域名或 IP 的连接范围由 Shadowrocket TUN 接口来处理，而不是 Shadowrocket 代理服务器。此选项用于解决一些应用程序的一些兼容性问题。
 skip-proxy = 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, localhost, *.local, captive.apple.com
-# TUN 旁路路由。Shadowrocket TUN 接口只能处理 TCP 协议。使用此选项可以绕过指定的 IP 范围，让其他协议通过。
 tun-excluded-routes = 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.88.99.0/24, 192.168.0.0/16, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 255.255.255.255/32, 239.255.255.250/32
-# DNS 覆写。使用普通 DNS 或加密 DNS（如 DoH、DoQ、DoT 等）覆盖默认的系统 DNS。填 system 表示使用系统 DNS。
-dns-server = system
-# 启用 IPv6 支持。false 表示不启用，true 表示启用。启用会同时查询 A 记录和 AAAA 记录，优先使用 IPv4 地址解析。
+
+# 香港环境推荐使用公共 DNS (Google/Cloudflare) 而非 System，防止 ISP 劫持，或者直接用 system 也可以
+dns-server = 8.8.8.8, 1.1.1.1, system
+
 ipv6 = false
-# 首选 IPv6。优先向 IPv6 的 DNS 服务器查询 AAAA 记录，优先使用 IPv6 地址解析。false 表示不启用。
 prefer-ipv6 = false
-# 备用 DNS。当覆写 DNS 查询失败或查询时间超过 2 秒，Shadowrocket 会自动回退备用 DNS。如需指定多个 DNS，可用逗号分隔。system 表示回退到系统 DNS。
 dns-fallback-system = false
-# 直连的域名类规则使用系统 DNS 进行查询。false 表示不启用。
 dns-direct-system = false
-# ping 数据包自动回复。
 icmp-auto-reply = true
-# 不开启时，「重写的 REJECT 策略」默认只有在配置模式下生效。开启后，可以令该策略在其他全局路由模式下都生效。
 always-reject-url-rewrite = false
-# 私有 IP 应答。如果不启用此选项，域名解析返回私有 IP，Shadowrocket 会认为该域名被劫持而强制使用代理。
 private-ip-answer = true
-# 直连域名解析失败后使用代理。false 表示不启用。
 dns-direct-fallback-proxy = true
 
 [Proxy Group]
-♻️ 自动优选 = url-test, tolerance = 50, policy-regex-filter = .
-✨ Gemini = select, 🇺🇲 美国节点
-💬 OpenAI = select, 🗺️ Non-HK
-✒️ Claude = select, 🇺🇲 美国节点, 🇸🇬 狮城节点
-🎵 Tiktok = select, 🇸🇬 狮城节点
-☎️ Tkatone = select, 🇺🇲 美国节点
+# --- AI 服务 (香港IP通常被锁，强制走代理) ---
 🍎 苹果智能 = select, 🇺🇲 美国节点
-📲 电报消息 = select, ♻️ 自动优选
-📹 油管视频 = select, ♻️ 自动优选
-🎥 奈飞视频 = select, ♻️ 自动优选
+✨ Gemini = select, 🇺🇲 美国节点, 🇸🇬 狮城节点
+💬 OpenAI = select, 🇺🇲 美国节点, 🇸🇬 狮城节点, 🗺️ Non-HK
+✒️ Claude = select, 🇺🇲 美国节点, 🇸🇬 狮城节点
+
+# --- 特殊服务 ---
+☎️ Tkatone = select, 🇺🇲 美国节点
+🎵 Tiktok = select, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇺🇲 美国节点
 📺 巴哈姆特 = select, 🇼🇸 台湾节点
-📺 哔哩哔哩 = select, 🎯 全球直连, 🇼🇸 台湾节点, 🇭🇰 香港节点
-🎶 网易音乐 = select, 🎯 全球直连, ♻️ 自动优选
-🌍 国外媒体 = select, ♻️ 自动优选
-🌏 国内媒体 = select, 🎯 全球直连
-📢 谷歌FCM = select, 🎯 全球直连, ♻️ 自动优选
-Ⓜ️ 微软云盘 = select, 🎯 全球直连, ♻️ 自动优选
-Ⓜ️ 微软服务 = select, 🎯 全球直连, ♻️ 自动优选
-🍎 苹果服务 = select, 🎯 全球直连, ♻️ 自动优选
-🎮 游戏平台 = select, 🎯 全球直连, ♻️ 自动优选
+
+# --- 基础策略 ---
 🎯 全球直连 = select, DIRECT
 🛑 广告拦截 = select, REJECT
 🍃 应用净化 = select, REJECT
-🐟 漏网之鱼 = select, ♻️ 自动优选, 🎯 全球直连
-🇭🇰 香港节点 = url-test, tolerance = 50, policy-regex-filter = (🇭🇰)|(港)|(Hong)|(HK) 
-🇼🇸 台湾节点 = url-test, tolerance = 50, policy-regex-filter = (🇼🇸)|(台)|(Tai)|(TW) 
-🇯🇵 日本节点 = url-test, tolerance = 50, policy-regex-filter = (🇯🇵)|(日)|(Japan)|(JP) 
-🇸🇬 狮城节点 = url-test, tolerance = 50, policy-regex-filter = (🇸🇬)|(新)|(Singapore)|(SG) 
+🐟 漏网之鱼 = select, DIRECT
+
+# --- 节点筛选策略 ---
+🇼🇸 台湾节点 = url-test, tolerance = 50, policy-regex-filter = (🇼🇸)|(台)|(Tai)|(TW)
+🇯🇵 日本节点 = url-test, tolerance = 50, policy-regex-filter = (🇯🇵)|(日)|(Japan)|(JP)
+🇸🇬 狮城节点 = url-test, tolerance = 50, policy-regex-filter = (🇸🇬)|(新)|(Singapore)|(SG)
 🇰🇷 韩国节点 = url-test, tolerance = 50, policy-regex-filter = (🇰🇷|韩|Korea|KR)
-🇺🇲 美国节点 = url-test, tolerance = 50, policy-regex-filter = (🇺🇸)|(美)|(States)|(US) 
+🇺🇲 美国节点 = url-test, tolerance = 50, policy-regex-filter = (🇺🇸)|(美)|(States)|(US)
 🇺🇳 小众节点 = url-test, tolerance = 50, policy-regex-filter = ^(?!.*(🇭🇰|港|HK|🇹🇼|台|TW|🇯🇵|日|JP|🇸🇬|新|SG|🇺🇸|美|US|🇰🇷|韩|Korea|KR|流量|到期|剩余|COM|com|官网)).*
+# 非香港节点组：用于AI等封锁HK IP的服务
 🗺️ Non-HK = url-test, tolerance = 50, policy-regex-filter = ^(?!.*(🇭🇰|港|Hong|HK|流量|到期|剩余|COM|com|官网)).*
 
 [Rule]
 # >> 去广告
 RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list,🛑 广告拦截,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list,🍃 应用净化,update-interval = 86400
+RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list,🍃 应用净化,update-interval = 
 
-# >> 个人直连：我常用的需要走直连的网站（补漏）
-RULE-SET,https://raw.githubusercontent.com/cycle1337-stack/Rules-for-Shadowrocket/refs/heads/main/RULE-SET_Personal_DIRECT.list,🎯 全球直连
-
-# >> 个人代理：我常用的需要走代理的网站（补漏）
-RULE-SET,https://raw.githubusercontent.com/cycle1337-stack/Rules-for-Shadowrocket/refs/heads/main/RULE-SET_Personal_PROXY.list,♻️ 自动优选
-
-# >> 本地设备
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list,🎯 全球直连,update-interval = 86400
-
-# >> 个人直连补漏：涵盖特定高频业务及私有设备访问
-# 作用：1. 确保 Epic、Hypixel 等特定游戏接口直连以降低延迟。
-#      2. 拦截并直连小米(Miui)、友盟(Umeng)、腾讯(Tencent)等国内 App 必备的推送与统计插件。
-#      3. 内网穿透加速：涵盖群晖(Synology)全系 DDNS 域名，确保远程访问家中 NAS 时流量不走代理。
-#      4. 包含特定运营商(Koodo)与地图(Strava)服务，保证特定环境下基础功能稳定。
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list,🎯 全球直连,update-interval = 86400
-
-# >> 各大AI 专用规则
-RULE-SET,https://raw.githubusercontent.com/cycle1337-stack/Rules-for-Shadowrocket/refs/heads/main/RULE-SET_Apple_Intelligence.list,🍎 苹果智能,update-interval = 86400
+# >> AI 专用规则 (必须走代理，香港不可用)
+RULE-SET,https://raw.githubusercontent.com/cycle1337-stack/Rules-for-Shadowrocket/refs/heads/main/RULE-SET_Apple_Intelligence.list,🇺🇲 美国节点,update-interval = 86400
 RULE-SET,https://raw.githubusercontent.com/cycle1337-stack/Gemini-rules-for-Shadowrocket/refs/heads/main/RULE-SET_Gemini.list,✨ Gemini,update-interval = 86400
 RULE-SET,https://yfamilys.com/rule/OpenAI.list,💬 OpenAI,update-interval = 86400
 RULE-SET,https://yfamilys.com/rule/Claude.list,✒️ Claude,update-interval = 86400
 
-# >> （暂时不需要）AI兜底规则 ：涵盖 Apple Intelligence、Microsoft Copilot、OpenAI、Claude、Grok 等，统一走美国节点以保证可用性
-#RULE-SET,https://raw.githubusercontent.com/iab0x00/ProxyRules/main/Rule/AI.txt,🇺🇲 美国节点,update-interval = 86400
-
-# >> TALKATONE 专用规则
+# >> 特殊 App 规则
 RULE-SET,https://raw.githubusercontent.com/iab0x00/ProxyRules/main/Rule/Talkatone.txt,☎️ Tkatone,update-interval = 86400
-
-# >> 币安：加密货币交易专用分流，通常建议走新加坡节点以获得最佳合规性
+# 币安在香港其实可以直连，但为了合规或账户安全，走新加坡也可以，这里保持原样
 RULE-SET,https://whatshub.top/rule/Binance.list,🇸🇬 狮城节点,update-interval = 86400
 
-# >> 谷歌服务：针对谷歌 FCM 推送、Play 商店等特定服务的分流设置
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/GoogleFCM.list,📢 谷歌FCM,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list,🎯 全球直连,update-interval = 86400
-
-# >> 微软与苹果：办公及系统更新服务分流，默认直连或走低延迟节点
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/SteamCN.list,🎯 全球直连,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/OneDrive.list,Ⓜ️ 微软云盘,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Microsoft.list,Ⓜ️ 微软服务,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list,🍎 苹果服务,update-interval = 86400
-
-# >> 社交与媒体：Tiktok、电报消息、油管、奈飞、B站及流媒体的分流策略
+# >> TikTok (香港不可用，必须代理)
 RULE-SET,https://raw.githubusercontent.com/Semporia/TikTok-Unlock/master/Shadowrocket/TikTok.list,🎵 Tiktok,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Telegram.list,📲 电报消息,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/NetEaseMusic.list,🎶 网易音乐,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/YouTube.list,📹 油管视频,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Netflix.list,🎥 奈飞视频,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Bahamut.list,📺 巴哈姆特,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/BilibiliHMT.list,📺 哔哩哔哩,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Bilibili.list,📺 哔哩哔哩,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaMedia.list,🌏 国内媒体,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyMedia.list,🌍 国外媒体,update-interval = 86400
 
-# >> 游戏平台：Steam、索尼、任天堂等加速分流
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Epic.list,🎮 游戏平台,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Origin.list,🎮 游戏平台,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Sony.list,🎮 游戏平台,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Steam.list,🎮 游戏平台,update-interval = 86400
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Nintendo.list,🎮 游戏平台,update-interval = 86400
-
-# >> GFW列表（收集了被GFW墙的域名）
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyGFWlist.list,♻️ 自动优选,update-interval = 86400
-
-# --- 各大云盘 ---
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Download.list,🎯 全球直连,update-interval = 86400
-
-# --- 140+ 局域网设备与内网服务直连 ---
-# 作用：确保访问家中或公司内部网络设备时流量不走代理
-# 包含：主流路由器管理后台（Asus, Aruba, H3C 等）及内网专用域名
-# 优势：解决内网穿透、NAS 访问以及像 Tank 300 车载 WiFi 连接时的通信问题
-# 覆盖：包含大量 IPv4 和 IPv6 的反向解析地址（in-addr.arpa），保证内网识别准确
-RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Lan/Lan.list,🎯 全球直连
-
-# >> 国内企业 IP：阿里、腾讯等巨头的服务器 IP 段直连，保证访问速度
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list,🎯 全球直连,update-interval = 86400
-
-# --- 3700+ 国内全能直连白名单 ---
-# 包含：12306、微信、网易及各类开发/下载工具的国内加速服务器
-RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/China/China.list,🎯 全球直连
-
-# >> 国内全能直连补漏：涵盖个人收藏、CN 域名及大厂关键字
-# 作用：1. MyList：收录个人常用的技术站、下载站及工具类网站（如 423down、mpYIT），确保访问不绕路。
-#      2. CN 域名全量直连：通过后缀（.cn）及 punycode 编码域名拦截所有中国国家级域名。
-#      3. 关键字模糊匹配：通过 KEYWORD 拦截包含 alipay、baidu、bilibili、jd、xiaomi 等大厂字符的所有请求，确保国内服务秒开。
-#      4. 厂商专项补全：针对 360、4399、58、阿里巴巴等国内大流量业务进行域名后缀全覆盖，防止大流量下载误走代理。
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list,🎯 全球直连,update-interval = 86400
-
-# >> 7000+ ipv4中国IP地址段合集
-RULE-SET,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaIp.list,🎯 全球直连,update-interval = 86400
-
-# GeoIP：根据 IP 地理位置，只要是中国大陆 IP 一律直连，并且关闭DNS解析
-GEOIP,CN,🎯 全球直连,no-resolve
-
-# > 兜底规则
-FINAL,🐟 漏网之鱼
+# > 兜底规则 (默认全部直连)
+FINAL,🎯 全球直连
 
 [Host]
 localhost = 127.0.0.1
 
-[URL Rewrite]
-# > Google搜索引擎防跳转的重写
-^https?://(www.)?(g|google)\.cn https://www.google.com 302
+[MITM]
+enable = true
+ca-passphrase = gCapzjhX
+ca-p12 = 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
